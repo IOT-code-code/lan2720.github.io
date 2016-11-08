@@ -110,7 +110,7 @@
 <meta property="og:description" content="用tensorflow实现CNN网络，识别6位验证码">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fgw1f9jxroo0saj20i50g2t9i.jpg">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/901f9a6fgw1f9l0e6ffy8j20nn0583z1.jpg">
-<meta property="og:updated_time" content="2016-11-08T20:13:42.000Z">
+<meta property="og:updated_time" content="2016-11-08T20:16:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Tensorflow6位验证码实战-3】如何构建model.py和train.py">
 <meta name="twitter:description" content="用tensorflow实现CNN网络，识别6位验证码">
@@ -229,9 +229,37 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '7e3w3dJQaJJjrp8kGcmp','2.0.0');
+</script>
+
+
+
+    </div>
   
 </nav>
 
@@ -312,7 +340,7 @@
       
 
       
-        <h2 id="前言">前言</h2><p>在第二讲中，我们用TFRecords生成了训练所需的batch数据，这一讲的任务就是从零开始，完成模型部分model.py和训练部分train.py的代码。</p>
+        <h2 id="前言">前言</h2><p>在<a href="http://lan2720.github.io/2016/11/09/%E3%80%90Tensorflow6%E4%BD%8D%E9%AA%8C%E8%AF%81%E7%A0%81%E5%AE%9E%E6%88%98-2%E3%80%91%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8TFRecords%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E9%9B%86/">第二讲</a>中，我们用TFRecords生成了训练所需的batch数据，这一讲的任务就是从零开始，完成模型部分model.py和训练部分train.py的代码。</p>
 <h2 id="哪些放在model-py中">哪些放在model.py中</h2><p>首先，我们需要决定哪些代码要放在model.py中，哪些放在train.py中。<br>这个问题其实会困扰每一个刚入门tensorflow的同学。为什么这么说，因为不管是官方给出的样例代码，还是github上各式各样的项目代码，大家构建整个项目的方式都不太相同。以下是我总结的三种：</p>
 <ol>
 <li>将模型代码单独提出到一个.py文件中，写成一个类，比如TextCNN。<a href="https://github.com/dennybritz/cnn-text-classification-tf" target="_blank" rel="external">参考这里</a>。整个类中有深度学习的各种结构，有output，loss，accuracy。和<a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/models/rnn/ptb/ptb_word_lm.py" target="_blank" rel="external">这里</a>，train/valid/test分别创建三个实例来用。</li>

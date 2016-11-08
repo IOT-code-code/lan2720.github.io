@@ -110,7 +110,7 @@
 <meta property="og:description" content="用tensorflow实现CNN网络，识别6位验证码">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/901f9a6fjw1f9jgcehk83j20sf0jnq8q.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fgw1f9jfpfpj34j20fh0abgp5.jpg">
-<meta property="og:updated_time" content="2016-11-08T19:59:40.000Z">
+<meta property="og:updated_time" content="2016-11-08T20:16:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Tensorflow6位验证码实战-2】如何使用TFRecords处理数据集">
 <meta name="twitter:description" content="用tensorflow实现CNN网络，识别6位验证码">
@@ -229,9 +229,37 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '7e3w3dJQaJJjrp8kGcmp','2.0.0');
+</script>
+
+
+
+    </div>
   
 </nav>
 
@@ -312,7 +340,7 @@
       
 
       
-        <h2 id="前言">前言</h2><p>这篇是第二讲，第一讲看<a href="http://hello.world" target="_blank" rel="external">这里</a>。<br>上一讲中已经在<code>data-batches-py</code>目录下生成了多个pickle打包的数据文件，有train和test数据。这次要做的就是如何利用这些原始pickle数据，转成TFRecords，并且生成batch data，用于训练。</p>
+        <h2 id="前言">前言</h2><p>这篇是第二讲，第一讲看<a href="http://lan2720.github.io/2016/11/09/%E3%80%90tensorflow6%E4%BD%8D%E9%AA%8C%E8%AF%81%E7%A0%81%E5%AE%9E%E6%88%98-1%E3%80%91%E8%B7%9F%E7%9D%80cifar10%E5%AD%A6%E5%A6%82%E4%BD%95%E6%89%93%E5%8C%85%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E9%9B%86/">这里</a>。<br>上一讲中已经在<code>data-batches-py</code>目录下生成了多个pickle打包的数据文件，有train和test数据。这次要做的就是如何利用这些原始pickle数据，转成TFRecords，并且生成batch data，用于训练。</p>
 <p>肯定有人问，我都已经有了pickle数据，想生成batch data很简单，为什么中间还要转成TFRecords呢？因为</p>
 <blockquote>
 <p>使用二进制的TFRecords格式，可以支持QueueRunner和Coordinator进行多线程数据读取，并且可以通过batch size和epoch参数来控制训练时单次batch的大小和对样本文件迭代训练多少轮。</p>
