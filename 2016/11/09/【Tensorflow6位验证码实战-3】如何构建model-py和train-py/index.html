@@ -1,0 +1,718 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Verdana:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="cnn,deeplearning,tensorflow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="用tensorflow实现CNN网络，识别6位验证码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Tensorflow6位验证码实战-3】如何构建model.py和train.py">
+<meta property="og:url" content="http://lan2720.github.io/2016/11/09/【Tensorflow6位验证码实战-3】如何构建model-py和train-py/index.html">
+<meta property="og:site_name" content="HAKUNA MATATA">
+<meta property="og:description" content="用tensorflow实现CNN网络，识别6位验证码">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fgw1f9jxroo0saj20i50g2t9i.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/901f9a6fgw1f9l0e6ffy8j20nn0583z1.jpg">
+<meta property="og:updated_time" content="2016-11-08T20:13:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Tensorflow6位验证码实战-3】如何构建model.py和train.py">
+<meta name="twitter:description" content="用tensorflow实现CNN网络，识别6位验证码">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主大人'
+    }
+  };
+</script>
+
+
+
+
+
+  <title> 【Tensorflow6位验证码实战-3】如何构建model.py和train.py | HAKUNA MATATA </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">HAKUNA MATATA</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Lan's Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-常用工具">
+          <a href="/常用工具" rel="section">
+            
+            常用工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【Tensorflow6位验证码实战-3】如何构建model.py和train.py
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-09T04:12:33+08:00" content="2016-11-09">
+              2016-11-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/09/【Tensorflow6位验证码实战-3】如何构建model-py和train-py/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/09/【Tensorflow6位验证码实战-3】如何构建model-py和train-py/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言">前言</h2><p>在第二讲中，我们用TFRecords生成了训练所需的batch数据，这一讲的任务就是从零开始，完成模型部分model.py和训练部分train.py的代码。</p>
+<h2 id="哪些放在model-py中">哪些放在model.py中</h2><p>首先，我们需要决定哪些代码要放在model.py中，哪些放在train.py中。<br>这个问题其实会困扰每一个刚入门tensorflow的同学。为什么这么说，因为不管是官方给出的样例代码，还是github上各式各样的项目代码，大家构建整个项目的方式都不太相同。以下是我总结的三种：</p>
+<ol>
+<li>将模型代码单独提出到一个.py文件中，写成一个类，比如TextCNN。<a href="https://github.com/dennybritz/cnn-text-classification-tf" target="_blank" rel="external">参考这里</a>。整个类中有深度学习的各种结构，有output，loss，accuracy。和<a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/models/rnn/ptb/ptb_word_lm.py" target="_blank" rel="external">这里</a>，train/valid/test分别创建三个实例来用。</li>
+<li>模型和训练同在一个py文件。<a href="https://github.com/tensorflow/tensorflow/tree/r0.11/tensorflow/models/image/mnist" target="_blank" rel="external">参考这里</a>和<a href="https://github.com/tobegit3hub/deep_recommend_system/blob/master/cancer_classifier.py" target="_blank" rel="external">这里</a>。</li>
+<li>还有一种更高级的结构，<a href="https://danijar.com/structuring-your-tensorflow-models/" target="_blank" rel="external">参考Danijar Hafner</a>。</li>
+</ol>
+<p>到底用哪种，每个人的喜好不一样。但是我觉得有<strong>几个基本点</strong>要把握：</p>
+<ol>
+<li>train/valid/test的时候都是有labels的，但是对于很多问题，训练好了模型，我希望给new input得到inference，这时候不知道其label，没法传入，因此labels不应该作为Graph中一个placeholder存在，因为placeholder在sess.run()的时候必须要以feed_dict传入。</li>
+<li>基于<a href="xxx">第二讲</a>我们从tfrecords中解析，然后获得的<code>batch_images</code>和<code>batch_labels</code>，其类型是Tensor Const，而做inference的时候，我们的new image经过预处理得到一个numpy array，我们希望这个array传入到model中，predict出一个array，那么很显然需要sess.run()，new image作为placeholder，以feed_dict传入到Graph。考虑到这点不同，个人认为input输入就不应该直接硬性的定义在model代码中了。因为要定义成一个placeholder吧，tfrecords得到的train_batch_data不能feed in；要不定义成placeholder吧，inference数据又没法传入。</li>
+<li>根据以上两点，inputs和labels都不能定义在model中了，因为model中放的只能是公共部分，也就是train/test和inference的时候都要有的结构，例如：卷积层，全连接层等等。既然如此，output是公共部分，应该纳入model；但是loss，accuracy在inference的时候不存在，因此不应该纳入model；再就是prediction（一般prediction是对output进行argmax()，即predict出的label），这个在train阶段不是必须的，因为train更关心loss（要不断optimize loss），loss的计算只需要output和labels即可。</li>
+</ol>
+<h2 id="结构图">结构图</h2><p>根据这个想法，简单画了个图，可以说整个图的内容是对tensorflow Graph的一个抽象。</p>
+<ol>
+<li>中间的model.py作为一个整体封装成一个部件。</li>
+<li>周边的inputs，labels，loss等结构是在train.py中加到Graph上的，train.py中维护一个全局<code>tf.Graph()</code>。</li>
+<li>每一部分都可以作为一个零部件，写代码时注意良好的可拔插性。</li>
+<li>model.py对外的接口只有inputs和outputs。</li>
+<li>labels对于不同的功能，相应传入</li>
+</ol>
+<p> <img src="http://ww4.sinaimg.cn/large/901f9a6fgw1f9jxroo0saj20i50g2t9i.jpg" alt=""></p>
+<p>好了，这样说来对整个structure的认识应该清晰很多。</p>
+<h2 id="完成model-py（项目中命名为captcha_cnn-py）">完成model.py（项目中命名为captcha_cnn.py）</h2><p>想法仍然是在model.py中完成一个CaptchaCNN类。之所以要实现一个类而不是一个函数，是因为模型结构有一些参数需要设置和定义，保存着全局都要用，函数无法实现这样的要求。</p>
+<h3 id="__init__()函数">__init__()函数</h3><p>__init__()应该传入构建CNN的一些必要参数，例如：</p>
+<ul>
+<li>filter_sizes：是一个list，每层都有一个filter_size，如第一层filter_size=3(3*3的小正方形)，第二层=2(2*2)，诸如此类。。如[3, 2, …]</li>
+<li>num_of_filters：也是一个list，定义每一个卷积层有多少个filters，如[64, 64, …]</li>
+<li>filter_strides：同上</li>
+<li>pool_sizes：仍然是一个list，每一个层进行max pool时的窗口大小，同样是正方形只需给出边长</li>
+<li>pool_strides：同上</li>
+<li>pool_types：pool type指的是每一池化层的类型，比如有maxpool和avgpool两种</li>
+<li>input_channels：是1还是3，在第一个卷积层需要用到这个值</li>
+<li>hidden_sizes：也是一个list，比如在多个conv-maxpool之后再连接2个全连接层，那么给出每一层的隐层单元数</li>
+<li>num_of_labels：multi-label问题，比如一张图中既可能有动物，又可能有人，植物出现的时候，该参数就=3；验证码中有6位字符，该值=6；如果是exclusive classification，该值=1。</li>
+<li>num_of_classes：每种label可能出现的情况。比如人，可能在画面中出现多少种人。验证码每一位字符可能出现a-zA-Z0-9共62种情况，那么该值=62</li>
+</ul>
+<h3 id="flow()函数">flow()函数</h3><p>这个函数是构建model的核心。它接受外部传入的inputs，数据进行flow。。flow。。flow，最后返回outputs，正如上图画的那样。<br>那么，inputs进来后，首先会遇到多个<code>卷积-池化层</code>。那么就先写一个这样的<code>conv_pool_layer</code>。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv_pool_layer</span><span class="params">(self, inputs, filter_size, num_of_filter, filter_stride,</span><br><span class="line">                    maxpool_size, maxpool_stride, pool_type)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> tf.device(<span class="string">'/cpu:0'</span>):</span><br><span class="line">        filter_shape = [filter_size, filter_size, int(inputs.get_shape()[-<span class="number">1</span>]), num_of_filter]</span><br><span class="line">        initializer = tf.contrib.layers.xavier_initializer_conv2d()</span><br><span class="line">        filter = tf.get_variable(<span class="string">"filter"</span>, filter_shape, initializer=initializer)</span><br><span class="line">    <span class="comment"># Conv</span></span><br><span class="line">    conv = tf.nn.conv2d(inputs, filter,</span><br><span class="line">                        strides=[<span class="number">1</span>, filter_stride, filter_stride, <span class="number">1</span>],</span><br><span class="line">                        padding=<span class="string">'VALID'</span>,</span><br><span class="line">                        name=<span class="string">'conv'</span>)</span><br><span class="line">    <span class="comment"># Activation</span></span><br><span class="line">    <span class="keyword">with</span> tf.device(<span class="string">'/cpu:0'</span>):</span><br><span class="line">        bias = tf.get_variable(<span class="string">'bias'</span>, [num_of_filter], initializer=tf.constant_initializer(<span class="number">0.0</span>))</span><br><span class="line">    bias_conv = tf.nn.bias_add(conv, bias)</span><br><span class="line">    relu_conv = tf.nn.relu(bias_conv, name=<span class="string">'relu'</span>)</span><br><span class="line">    <span class="comment"># Maxpool</span></span><br><span class="line">    <span class="keyword">if</span> pool_type == <span class="string">'max'</span>:</span><br><span class="line">        pooled = tf.nn.max_pool(relu_conv, ksize=[<span class="number">1</span>, maxpool_size, maxpool_size, <span class="number">1</span>],</span><br><span class="line">                                strides=[<span class="number">1</span>, maxpool_stride, maxpool_stride, <span class="number">1</span>],</span><br><span class="line">                                padding=<span class="string">'VALID'</span>, name=<span class="string">'pooling'</span>)</span><br><span class="line">    <span class="keyword">elif</span> pool_type == <span class="string">'avg'</span>:</span><br><span class="line">        pooled = tf.nn.avg_pool(relu_conv, ksize=[<span class="number">1</span>, maxpool_size, maxpool_size, <span class="number">1</span>],</span><br><span class="line">                                strides=[<span class="number">1</span>, maxpool_stride, maxpool_stride, <span class="number">1</span>],</span><br><span class="line">                                padding=<span class="string">'VALID'</span>, name=<span class="string">'pooling'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'pool_type should be `max` or `avg`.'</span>)</span><br><span class="line">    <span class="keyword">return</span> pooled</span><br></pre></td></tr></table></figure></p>
+<p>这部分只提醒一点，就是initializer，我的网络一开始不work，换成xavier就立刻好了。切记初始化的重要性啊。</p>
+<p>多个卷积层之后就是<code>全连接层</code>，常规结构，直接上代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">full_connect_layer</span><span class="params">(self, inputs, weights_shape, biases_shape)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> tf.device(<span class="string">'/cpu:0'</span>):</span><br><span class="line">        weights = tf.get_variable(<span class="string">"weights"</span>,</span><br><span class="line">                                  weights_shape,</span><br><span class="line">                                  initializer=tf.contrib.layers.xavier_initializer())</span><br><span class="line">        biases = tf.get_variable(<span class="string">"biases"</span>,</span><br><span class="line">                                 biases_shape,</span><br><span class="line">                                 initializer=tf.constant_initializer(<span class="number">0.0</span>))</span><br><span class="line">    <span class="keyword">return</span> tf.matmul(inputs, weights) + biases</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">full_connect_activate</span><span class="params">(self, inputs, weights_shape, biases_shape, activation=<span class="string">'relu'</span>)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> activation == <span class="string">'relu'</span>:</span><br><span class="line">        <span class="keyword">return</span> tf.nn.relu(self.full_connect_layer(inputs, weights_shape, biases_shape))</span><br><span class="line">    <span class="keyword">elif</span> activation == <span class="string">'sigmoid'</span>:</span><br><span class="line">        <span class="keyword">return</span> tf.nn.sigmoid(self.full_connect_layer(inputs, weights_shape, biases_shape))</span><br><span class="line">    <span class="keyword">elif</span> activation == <span class="string">'tanh'</span>:</span><br><span class="line">        <span class="keyword">return</span> tf.nn.tanh(self.full_connect_layer(inputs, weights_shape, biases_shape))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'Unsupported activation function, '</span></span><br><span class="line">                         <span class="string">'please select from `relu`, `sigmoid` and `tanh`.'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>可以看到我写了两部分，一个是带激活函数的，一个不带。为什么这么写，是考虑到输出层。因为输出层也是全连接的，但是它不应该被relu，softmax等激活，而是logits传出，这样在传递出去后，loss部分的代码才进行softmax和cross entropy的计算。<br>这么做也是基于tensorflow的api中有这么一个函数<code>tf.nn.sparse_softmax_cross_entropy_with_logits(logits, labels, name=None)</code>，我从文档中摘出一段warning，</p>
+<blockquote>
+<p>WARNING: This op expects unscaled logits, since it performs a softmax on logits internally for efficiency. Do not call this op with the output of softmax, as it will produce incorrect results.</p>
+</blockquote>
+<p> 也就是说tensorflow内部在此处做了优化，因此只接收unscaled logits，不然就错了。所以，既然我要使用这个函数的话，outputs传出的时候就应该是logits的未被激活状态，因此要用到<code>full_connect_layer</code>而不是<code>full_connect_acrivate</code>。</p>
+<p> 以上两个函数就是基本模块了。</p>
+<p> 接下来来如何将模块像搭积木一样的拼起来呢？上代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">flow</span><span class="params">(self, inputs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.filter_sizes)):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">            inputs_ = inputs</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            inputs_ = self.conv_pools[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">with</span> tf.variable_scope(<span class="string">'conv-pool-&#123;&#125;'</span>.format(i + <span class="number">1</span>)):</span><br><span class="line">            conv_pool = self.conv_pool_layer(inputs_,</span><br><span class="line">                                             filter_size=self.filter_sizes[i],</span><br><span class="line">                                             num_of_filter=self.num_of_filters[i],</span><br><span class="line">                                             filter_stride=self.filter_strides[i],</span><br><span class="line">                                             maxpool_size=self.pool_sizes[i],</span><br><span class="line">                                             maxpool_stride=self.pool_strides[i],</span><br><span class="line">                                             pool_type=self.pool_types[i])</span><br><span class="line">        self.conv_pools.append(conv_pool)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.hidden_sizes)):</span><br><span class="line">        <span class="keyword">with</span> tf.variable_scope(<span class="string">'full-connect-&#123;&#125;'</span>.format(i + <span class="number">1</span>)):</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">                batch_size = int(inputs.get_shape()[<span class="number">0</span>])</span><br><span class="line">                inputs_ = tf.reshape(self.conv_pools[-<span class="number">1</span>], [batch_size, -<span class="number">1</span>])</span><br><span class="line">                in_size = int(inputs_.get_shape()[-<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                inputs_ = self.full_connects[-<span class="number">1</span>]</span><br><span class="line">                in_size = self.hidden_sizes[i - <span class="number">1</span>]</span><br><span class="line">            full_connect = self.full_connect_activate(inputs_,</span><br><span class="line">                                                      weights_shape=[in_size,</span><br><span class="line">                                                      self.hidden_sizes[i]],</span><br><span class="line">                                                      biases_shape=[self.hidden_sizes[i]],</span><br><span class="line">                                                      activation=<span class="string">'relu'</span>)</span><br><span class="line">        self.full_connects.append(full_connect)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">'outputs'</span>) <span class="keyword">as</span> scope:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.num_of_labels):</span><br><span class="line">            <span class="keyword">with</span> tf.variable_scope(<span class="string">'part-&#123;&#125;'</span>.format(i)):</span><br><span class="line">                fc_part = self.full_connect_layer(self.full_connects[-<span class="number">1</span>],</span><br><span class="line">                                                  weights_shape=[self.hidden_sizes[-<span class="number">1</span>],</span><br><span class="line">                                                  self.num_of_classes],</span><br><span class="line">                                                  biases_shape=[self.num_of_classes])</span><br><span class="line">                self._outputs.append(fc_part)  <span class="comment"># [batch_size, num_of_classes]</span></span><br><span class="line">        self._outputs = tf.concat(<span class="number">1</span>, self._outputs, name=scope.name)</span><br></pre></td></tr></table></figure>
+<p>我们不只需要一个conv-pool层，而是多个stack起来，就像论文<a href="https://pdfs.semanticscholar.org/ab6d/a3000aba197571d69b3e205a7945dd691469.pdf?_ga=1.153728443.205781980.1478308431" target="_blank" rel="external">Captcha Recognition with Active Deep Learning</a>中给出的结构图那样：<br><img src="http://ww2.sinaimg.cn/large/901f9a6fgw1f9l0e6ffy8j20nn0583z1.jpg" alt=""><br>堆3层cnn，后面一个全连接，一个输出层。<br>这是用cnn做图像识别的基本结构，也可以参看项亮的<a href="https://zhuanlan.zhihu.com/p/21344595?refer=xlvector" target="_blank" rel="external">知乎专栏</a>和<a href="http://blog.xlvector.net/2016-05/mxnet-ocr-cnn/" target="_blank" rel="external">blog</a>，讲的挺详细的，我就不再赘述了。</p>
+<p>但是话说回来，他们都是用mxnet写的网络结构，我用tensorflow写的时候就不想一层层搭了，直接for循环，把所有的<code>conv-pool</code>都构建出来，<code>全连接层</code>也是for循环，最后是<code>输出层</code>。</p>
+<p>需要注意的是，由于是multi-label，网络需要同时学习多个label，因此有几个label（<code>num_of_labels</code>），就构建几个<code>子输出层</code>。这些子输出层的神经元个数就是<code>num_of_classes</code>，刚才我们传入到CaptchaCNN的这些参数也就是全用上了。子输出层最后concat起来，作为这个model的outputs。</p>
+<p>model部分的代码大功告成。前往<a href="https://github.com/lan2720/cnn-for-captcha/blob/master/captcha_cnn.py" target="_blank" rel="external">完整代码</a>。</p>
+<h2 id="train-py该写些什么">train.py该写些什么</h2><p>model.py中的代码弄清楚之后就会发现，真正能用于训练的graph还差一些结构，比如loss没有定义，accuracy没有写，optimizer也没有定义。很好，这些东西就需要在train.py中一点点的加到<code>tf.Graph()</code>上，和刚才写的model拼接起来，最后就能完整的构建一个可以用于train/inference的tensorflow graph了。训练部分的<a href="https://github.com/lan2720/cnn-for-captcha/blob/master/train.py" target="_blank" rel="external">完整代码</a>在这里。</p>
+<p>自认为结构很清晰的，捋一下结构：</p>
+<ol>
+<li>FLAGS定义必要的参数</li>
+<li>如果有TFRecords文件存在则跳过这步，没有则从原始pickle数据生成.tfrecords文件</li>
+<li>用tf.shuffle_batch生成train batch data和labels（这部分代码在captcha_input.py中）</li>
+<li>定义CaptchaCNN模型</li>
+<li>传给模型inputs，flow()得到outputs，与此同时将这部分结构加载到Graph上</li>
+<li>给Graph加上零部件：loss，predictions，accuracy。</li>
+<li>定义optimizer，learning rate自动decay</li>
+<li>最后是模型保存Saver，训练过程记录Summary等一些小结构</li>
+<li>训练部分使用Coordinator，自动根据num_epochs来做数据生成，且多线程</li>
+</ol>
+<p>That’s all! 我们完成了用tensorflow实现cnn来识别6位验证码的全部工作。</p>
+<h2 id="结果">结果</h2><p>GTX 1080上训练1个小时达到98%以上的accuracy，现在的代码我还没有加任何regularization的部分，所以能达到这么高是完全拟合了15万训练集数据。之后我还有几项TODO要做：</p>
+<ul>
+<li>regularization</li>
+<li>加上valid batch data，边训练边validation</li>
+<li>完成inference部分</li>
+</ul>
+<p>如有任何问题欢迎去github提issue~</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="http://ww4.sinaimg.cn/large/901f9a6fjw1f9lb1mjkmdj20af0aigmm.jpg" alt="Lan WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cnn/" rel="tag">#cnn</a>
+          
+            <a href="/tags/deeplearning/" rel="tag">#deeplearning</a>
+          
+            <a href="/tags/tensorflow/" rel="tag">#tensorflow</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/09/【Tensorflow6位验证码实战-2】如何使用TFRecords处理数据集/" rel="next" title="【Tensorflow6位验证码实战-2】如何使用TFRecords处理数据集">
+                <i class="fa fa-chevron-left"></i> 【Tensorflow6位验证码实战-2】如何使用TFRecords处理数据集
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/09/【Tensorflow6位验证码实战-3】如何构建model-py和train-py/"
+           data-title="【Tensorflow6位验证码实战-3】如何构建model.py和train.py" data-url="http://lan2720.github.io/2016/11/09/【Tensorflow6位验证码实战-3】如何构建model-py和train-py/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Lan" />
+          <p class="site-author-name" itemprop="name">Lan</p>
+          <p class="site-description motion-element" itemprop="description">Enjoy life, with friends. Do one thing, and do it best.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哪些放在model-py中"><span class="nav-number">2.</span> <span class="nav-text">哪些放在model.py中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构图"><span class="nav-number">3.</span> <span class="nav-text">结构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完成model-py（项目中命名为captcha_cnn-py）"><span class="nav-number">4.</span> <span class="nav-text">完成model.py（项目中命名为captcha_cnn.py）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#__init__()函数"><span class="nav-number">4.1.</span> <span class="nav-text">__init__()函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flow()函数"><span class="nav-number">4.2.</span> <span class="nav-text">flow()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#train-py该写些什么"><span class="nav-number">5.</span> <span class="nav-text">train.py该写些什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">6.</span> <span class="nav-text">结果</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lan</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lan2720"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
