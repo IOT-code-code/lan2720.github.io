@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="cnn,deeplearning,tensorflow," />
+  <meta name="keywords" content="nlp," />
 
 
 
@@ -102,18 +102,21 @@
 
 
 
-<meta name="description" content="用tensorflow实现CNN网络，识别6位验证码">
+<meta name="description" content="在深度网络上，如何从Memory中提取情感相关信息来提高分类准确率。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集">
-<meta property="og:url" content="http://lan2720.github.io/2016/11/09/【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集/index.html">
+<meta property="og:title" content="论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》">
+<meta property="og:url" content="http://lan2720.github.io/2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/index.html">
 <meta property="og:site_name" content="HAKUNA MATATA">
-<meta property="og:description" content="用tensorflow实现CNN网络，识别6位验证码">
-<meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fgw1f9i8cwqgihj20nl04aweg.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/901f9a6fgw1f9i95vj5h4j202o00pt8h.jpg">
-<meta property="og:updated_time" content="2016-11-08T19:59:05.000Z">
+<meta property="og:description" content="在深度网络上，如何从Memory中提取情感相关信息来提高分类准确率。">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fgw1f7n0xhu7znj20m80lgq75.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/901f9a6fjw1f7n2kluz9wj20lq03gjs6.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/901f9a6fjw1f7n2mggy63j20fg03cq37.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fjw1f7n3vaw0xyj20i201s0sz.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fjw1f7n4c5re4kj20ho07cgnw.jpg">
+<meta property="og:updated_time" content="2016-11-10T11:14:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集">
-<meta name="twitter:description" content="用tensorflow实现CNN网络，识别6位验证码">
+<meta name="twitter:title" content="论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》">
+<meta name="twitter:description" content="在深度网络上，如何从Memory中提取情感相关信息来提高分类准确率。">
 
 
 
@@ -135,7 +138,7 @@
 
 
 
-  <title> 【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集 | HAKUNA MATATA </title>
+  <title> 论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》 | HAKUNA MATATA </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -303,7 +306,7 @@
             
             
               
-                【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集
+                论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》
               
             
           </h1>
@@ -315,8 +318,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-11-09T02:12:44+08:00" content="2016-11-09">
-              2016-11-09
+            <time itemprop="dateCreated" datetime="2016-11-10T19:11:56+08:00" content="2016-11-10">
+              2016-11-10
             </time>
           </span>
 
@@ -326,8 +329,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/11/09/【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/09/【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集/" itemprop="commentsCount"></span>
+                <a href="/2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -337,7 +340,7 @@
 
           
           
-             <span id="/2016/11/09/【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集/" class="leancloud_visitors" data-flag-title="【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集">
+             <span id="/2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/" class="leancloud_visitors" data-flag-title="论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -359,31 +362,61 @@
       
 
       
-        <h2 id="前言">前言</h2><p>我们写了一个模型，发布到了github上，但是很多时候不会把数据集一同上传，因为对于computer vision来说图像数据集往往过大，这就导致了别人无法用你的数据集来重现结果。</p>
-<p>因此，我想通过<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="external">cifar-10</a>的数据打包方法整理一个数据pipeline出来，以便在今后任何项目中都能方便的使用。</p>
-<h2 id="关于大小">关于大小</h2><p>在cifar10官网可以看到，6万张32*32的彩色图片，打包后为165MB左右，大小还是完全能接受的。</p>
-<h2 id="关于版本">关于版本</h2><p>提供了三种版本的数据文件，<br><img src="http://ww4.sinaimg.cn/large/901f9a6fgw1f9i8cwqgihj20nl04aweg.jpg" alt=""><br>我自己平时使用Python更多，因此只讲python版的，matlab和binary应该类似，此处不讨论。</p>
-<h2 id="处理后的文件结构">处理后的文件结构</h2><p>在<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="external">cifar10</a>上首先找到Dataset layout - Python / Matlab versions</p>
-<p>可以看到，作者讲6万张图片每1万张进行一个打包处理（batch），而且pickle的对象是一个dict，很好奇里面究竟存储了什么样的数据。<br>因此下载CIFAR-10 python version，解压缩得到cifar-10-batches-py，然后用代码看看里面的内容。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unpickle</span><span class="params">(file)</span>:</span></span><br><span class="line">	<span class="keyword">import</span> cPickle</span><br><span class="line">	fo = open(file, <span class="string">'rb'</span>)</span><br><span class="line">	dict = cPickle.load(fo)</span><br><span class="line">	fo.close()</span><br><span class="line">	<span class="keyword">return</span> dict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	fname = <span class="string">"$&#123;PATH TO THIS DIRECTORY&#125;/cifar-10-batches-py/data_batch_1"</span></span><br><span class="line">	data = unpickle(fname)</span><br><span class="line">	<span class="keyword">print</span> data.keys()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure></p>
-<p>结果是这样的，每个batch dict中有四个key可供访问，但是就像作者说的，只有data和labels两个key有用。</p>
-<blockquote>
-<p>[‘data’, ‘labels’, ‘batch_label’, ‘filenames’]</p>
-</blockquote>
-<ul>
-<li>data — a 10000x3072 numpy array of uint8s. Each row of the array stores a 32x32 colour image. The first 1024 entries contain the red channel values, the next 1024 the green, and the final 1024 the blue. The image is stored in row-major order, so that the first 32 entries of the array are the red channel values of the first row of the image.</li>
-<li>labels — a list of 10000 numbers in the range 0-9. The number at index i indicates the label of the ith image in the array data.</li>
+        <p>来源：唐都钰大神emnlp2016 full paper<br>关键词：aspect，attention，multi-layer</p>
+<p>通读全文后发现唐大神根本就没用cnn/lstm等等成熟的模型，而是建立了一个自己的全新模型MemNet。最后实验证明和最好的svm得到的结果媲美。<br>【因此，个人觉得在aspect level上的情感分析（深度学习方向），不仅可以自己提出一个全新模型，还可以探索结合lstm等rnn的模型来做。但是不管怎么做，归根到底的一点是模型能很好的抽取aspect word和句中其他部分的关联】</p>
+<h2 id="An_Overview_of_the_Approach">An Overview of the Approach</h2><ul>
+<li>对一个sentence+aspect：比如sentence = “great food but the service was dreadful!”, aspect = “food”。这里强调sentence是因为该方法并没有针对doc（也就是多个sentences组成的reviews，比如IMDB）输入来分析其aspect，仅仅针对单个sentence。【这个地方可能是潜在的挖掘点】</li>
+<li>给定的aspect要么是单个word，要么是word expression，但在此paper中作者用的是单个word来做尝试：单个word则aspect representation直接是这个word的embedding；word expression的话aspect representation是用average word vectors表示【作者说这样处理是参考Sun 2015】</li>
+<li>用到的word vectors分两部分（即每层的输入有两部分）：aspect vector和context word vectors。context word vectors即sentence中所有除了aspect word $w_i$之外的单词的word embeddings堆叠到一起，这就是最为重要的<strong>external memory</strong> $m$。shape=[d, n-1]</li>
+<li>作者的想法来源于<a href="http://papers.nips.cc/paper/5846-end-to-end-memory-networks.pdf" target="_blank" rel="external">QA中使用memory network</a></li>
+<li>多个computational layers：每个computational layer=attention layer+linear layer</li>
+<li>第一个computational layer的attention layer：输入aspect vector给attention layer，输出memory $m$中的重要部分（就类似不同的aspect word激发的注意力不同，得到的重要部分也不同一样）</li>
+<li>第一个computational layer的linear layer：attention layer得到的输出+linear(aspect vector)，得到的sum作为第二个computational layer的输入。【作者说加上linear这个部分效果更好，但原因不明？】</li>
+<li>多层的用处：提取出更abstractive的evidences（关于某aspect）,因此这样一个结构的最后一层output vector就是这个sentence关于此aspect的句子表示。【被当做features用于后面的分类】</li>
+<li>不同层之间的attention layer/linear layer是共享参数的。因此9层模型的参数量和1层模型是一样的。</li>
 </ul>
-<h2 id="总结思路">总结思路</h2><p>举例来说，我现在的图片是<a href="https://investorservice.cfmmc.com/" target="_blank" rel="external">cfmmc投资者查询服务系统</a>主页的验证码图片，如下图：<br><img src="http://ww1.sinaimg.cn/large/901f9a6fgw1f9i95vj5h4j202o00pt8h.jpg" alt=""><br>那么，处理步骤如下：</p>
+<p>整个model的框架如下图：<br><img src="http://ww4.sinaimg.cn/large/901f9a6fgw1f7n0xhu7znj20m80lgq75.jpg" alt=""><br>再梳理一下整个结构<br><strong>输入</strong>：aspect word vector和context words vectors</p>
 <ol>
-<li>收集到n多张这样的图片。一种方法是爬虫抓取，但是缺点是抓到了图片但没有label，还要通过各种渠道去人工标注，比如打码兔，另一种方法是写代码模拟生成这样的验证码，好处是可以生成无限张这样的图片，而且带label。</li>
-<li>将我们手上的原始图片转换成numpy array，shape=[size, channels*height*width]。由于我们现在只是打包数据，因此不需要在这里对原始图片进行任何预处理，直接转成array即可。</li>
-<li>将label对应存储在一个list中，长度为size。</li>
-<li>生成一个dict，包含”data”和”labels”两个key，并赋值。</li>
-<li>用cPickle dump到文件，命名为例如”data_batch_1”，存放在dataset-batches-py目录下。</li>
-<li>最后所有batch生成完相应的pickle文件后，对目录整体压缩为.tar.gz即可发布数据了。</li>
+<li>首先经过第一个计算层的attention layer：aspect vector和context vectors（即external memory）作为输入，经过attention layer后得到输出，这个输出是memory中筛选出的有关aspect word的重要信息。</li>
+<li>于此同时，第一个计算层的linear layer也在进行：其接收的输入是aspect vector，经过linear layer后输出一个sth【暂时还没理解这个sth可以表示什么，难道是对aspect的再表示？】</li>
+<li>将step 1和2这个输出sum到一起，作为第一个计算层的output</li>
+<li>后续计算层接收前一计算层的output，继续相同的step 1-3</li>
 </ol>
-<h2 id="代码">代码</h2><p>整个思路的代码实现在<a href="https://github.com/lan2720/cnn-for-captcha/blob/master/captcha.py" target="_blank" rel="external">这里</a>，请参考。</p>
-<p>欢迎讨论或提issue，下一篇讲解如何从pickle文件到<a href="https://www.tensorflow.org/versions/r0.11/how_tos/reading_data/index.html#file-formats" target="_blank" rel="external">Standard TensorFlow format</a>。</p>
+<p><strong>输出</strong>：the representation of sentence with regard to the aspect</p>
+<p>【注1】两部分输入的作用域区别：外部记忆的context vectors（即external memory）在所有层都作为了input使用，但是aspect vector仅在第一个计算层作为input使用。<br>【注2】之所以强调是external memory，个人觉得是因为如果我们固定了aspect word，如：“food”，那么对一个sentence来说，其context vectors是固定的（除去aspect words后的其他words），在整个layers传输中都不会改变了，这相对于lstm模型的内部cell state memory每次update是不同的概念。如果lstm称为内部memory，那这个外部的、事先就提供的信息就称为external memory了。</p>
+<blockquote>
+<p>model的意思是不断从external memory中抽取关于aspect words有用的、更high-level abstractive的features（这些features用于后续分类）</p>
+</blockquote>
+<h2 id="Content_Attention">Content Attention</h2><p>纵览整个框架，发现只要我们了解attention layer和input layer的具体实现，整个model就能用代码implement出来了。确实如此，而且，linear layer实际上就是一个linear transformation不必解释。只剩下attention layer的设计了。</p>
+<p>因此作者紧接着在这个section中讲述了其attention layer的具体操作。</p>
+<p>在上面我们讲到，attention layer是想从external memory中筛选出关于aspect的important information。换句话说，给出了aspect word和其context words，这个context words中每个词和aspect的关联不是相同的，比如<br><figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sentence = <span class="comment">"great food but the service was dreadful!"</span></span><br><span class="line">aspect = <span class="comment">"food"</span></span><br><span class="line">its context words = [<span class="comment">"great"</span>, <span class="comment">"but"</span>, <span class="comment">"the"</span>, <span class="comment">"service"</span>, <span class="comment">"was"</span>, <span class="comment">"dreadful"</span>, <span class="comment">"!"</span>]</span><br></pre></td></tr></table></figure></p>
+<p>要想得到关于aspect的情感，必然是从其context words得到信息。context words中有些信息对aspect而言很重要，有些没什么用。自然就想到那给context words中的每个word附一个权重好了，用权重来衡量其重要性，就有了下面的公式(假设其context words有k个words)：<br>$weighted_info$ = $\alpha<em>1<em>w_1 + \alpha_2</em>w_2 + … + \alpha_k*w_k = \sum</em>{i=1}^k \alpha<em>iw_i = \sum</em>{i=1}^k \alpha_im_i$<br>(memory matrix的每一列都对应一个word的word vector)</p>
+<p>那么接下来的关键是如何知道每个$\alpha_i$是多少，也就是哪个word更重要，这个就要学出来了。如何学，用attention layer学。</p>
+<p>这个attention layer有两部分（实际是三部分）：</p>
+<ol>
+<li>接收输入[memory, aspect]，做一个affine transformation（tanh）<br><img src="http://ww3.sinaimg.cn/large/901f9a6fjw1f7n2kluz9wj20lq03gjs6.jpg" alt=""></li>
+<li>由于得到的$\alpha_i$之和要为1，因此自然想到经过一个softmax<br><img src="http://ww2.sinaimg.cn/large/901f9a6fjw1f7n2mggy63j20fg03cq37.jpg" alt=""></li>
+<li>（*）这一步就很简单了也就是上面的$weighted_info$公式<br>好了，这就得到了attention layer的输出——一个带有aspect attention的external memory info</li>
+</ol>
+<p>【注️】说到这里，我们知道第一层输入的是aspect，生成了external memory中关于这个aspect的important memory info；第二层输入这个important memory info，再从external memory中抽出更进一步的memory info，不断循环，因此最后。。可以想象。<br>【存在的问题】但是，上述这个attention layer单纯是根据最后的target（比如aspect=“food”时target=1）计算loss然后更新参数，学习到$W<em>{att}$和$b</em>{att}$的。这样也就是说如果sentence中有两个positive的情感词，那么最终的attention必然是这两个positive的情感词都很高。<br><figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sentence = <span class="comment">"great food tasty drink but the service was dreadful!"</span></span><br></pre></td></tr></table></figure></p>
+<p>现在有两个正向情感词，一个形容“food”的“great”，一个是形容“drink”的“tasty”，按上述模型学出来肯定在“great”和“tasty”处的attention都很大！【仅根据模型推理，还没做实验，我觉得是可以验证这一点的】</p>
+<p>因此，要想把attention还是集中在“great”这个词上，那么显然需要考虑word和aspect word的位置关系，或<strong>syntactic path</strong>中的关系【这点可能更重要】。</p>
+<h2 id="Location_Attention">Location Attention</h2><p>既然我都想到了这个问题，唐大神自然早考虑到。因此，在这个section中就衡量了the location of a context word.<br>但是，他用的是absolute distance【绝对距离指什么，great=-1，tasty=1吗？】<br>他设计了4种models来做：<br>定义了一个location vector，这四种model的区别就在于计算location vector的方法不同。<br>（1）用了一个复杂公式【为什么是这个公式还不知道唐大神是怎么想出来的】<br><img src="http://ww4.sinaimg.cn/large/901f9a6fjw1f7n3vaw0xyj20i201s0sz.jpg" alt=""><br>n：句子长度<br>k：hop数，也就是整个模型使用的computational layer数<br>$l_i$：$w_i$的location【此处location如何来？】<br>（2）第二个model有句话没看懂：<code>using the same location vector v_i for w_i in different hops</code>【in different hops指什么】<br>（3）在原始的external memory matrix上做文章：之前external memory matrix是由多个context word embeddings构成的，现在改成<strong>word embedding+其location vector</strong>。由于word_i的location vector我们不知道，因此随机初始化，不断在train过程中更新学到。（所有的position vectors stack到一起交position embedding matrix，也就是对每个word location info的一种embedding，事先我们不知道，是不断学出来的）<br>（4）同（3），也是不断学position embedding matrix，但是memory组合方式不同了（类似gate机制）</p>
+<p>个人认为，model 3、4合情合理。model 1、2不是太懂来历。</p>
+<h2 id="Dataset">Dataset</h2><p>以上就完整的描述了作者的设计，接下来是实验。<br>数据集就两个：<br>SemEval2014的laptop和restaurant数据。<br><img src="http://ww4.sinaimg.cn/large/901f9a6fjw1f7n4c5re4kj20ho07cgnw.jpg" alt=""><br>【数据集太小了点吧。。】</p>
+<h2 id="Experiment">Experiment</h2><p>实验中测试的模型都是来自唐大神2015另一篇专门用lstm做情感分类的<a href="http://arxiv.org/pdf/1512.01100v1.pdf" target="_blank" rel="external">paper</a>【这篇貌似并没有发表】</p>
+<p>还有另一个模型ContextAVG，作者说是simplistic version，并没有讲清楚到底怎么简化的。</p>
+<p>作者抨击lstm模型的点在于：</p>
+<ol>
+<li>分类准确率不能与svm比肩</li>
+<li>训练耗时长</li>
+</ol>
+<p>然后说明自己提出的这个全新model在这两点上打败lstm-based models。</p>
+<h2 id="论证自己模型结构的有效性">论证自己模型结构的有效性</h2><ul>
+<li>multiple computational layers: 多层可以提高accuracy，但是到了8、9层左右就平台区了</li>
+<li>在4个模型中，作者prefer Model 2，计算量最少也不失准确率</li>
+<li>Model 4对gate的选择很敏感，加上gate提高了5%的准确率【待检测】</li>
+</ul>
 
       
     </div>
@@ -422,11 +455,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/cnn/" rel="tag">#cnn</a>
-          
-            <a href="/tags/deeplearning/" rel="tag">#deeplearning</a>
-          
-            <a href="/tags/tensorflow/" rel="tag">#tensorflow</a>
+            <a href="/tags/nlp/" rel="tag">#nlp</a>
           
         </div>
       
@@ -435,13 +464,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/11/10/解决Intellij-Idea在linux下中文乱码问题/" rel="next" title="解决Intellij Idea在linux下中文乱码问题">
+                <i class="fa fa-chevron-left"></i> 解决Intellij Idea在linux下中文乱码问题
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/11/09/【Tensorflow6位验证码实战-2】如何使用TFRecords处理数据集/" rel="prev" title="【Tensorflow6位验证码实战-2】如何使用TFRecords处理数据集">
-                【Tensorflow6位验证码实战-2】如何使用TFRecords处理数据集 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -467,8 +496,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/11/09/【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集/"
-           data-title="【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集" data-url="http://lan2720.github.io/2016/11/09/【tensorflow6位验证码实战-1】跟着cifar10学如何打包图像数据集/">
+      <div class="ds-thread" data-thread-key="2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/"
+           data-title="论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》" data-url="http://lan2720.github.io/2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/">
       </div>
     
   </div>
@@ -552,7 +581,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于大小"><span class="nav-number">2.</span> <span class="nav-text">关于大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于版本"><span class="nav-number">3.</span> <span class="nav-text">关于版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理后的文件结构"><span class="nav-number">4.</span> <span class="nav-text">处理后的文件结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结思路"><span class="nav-number">5.</span> <span class="nav-text">总结思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">6.</span> <span class="nav-text">代码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#An_Overview_of_the_Approach"><span class="nav-number">1.</span> <span class="nav-text">An Overview of the Approach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Content_Attention"><span class="nav-number">2.</span> <span class="nav-text">Content Attention</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Location_Attention"><span class="nav-number">3.</span> <span class="nav-text">Location Attention</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dataset"><span class="nav-number">4.</span> <span class="nav-text">Dataset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiment"><span class="nav-number">5.</span> <span class="nav-text">Experiment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#论证自己模型结构的有效性"><span class="nav-number">6.</span> <span class="nav-text">论证自己模型结构的有效性</span></a></li></ol></div>
             
           </div>
         </section>
