@@ -1,0 +1,843 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Verdana:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="attention,nlp," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="今年9月初针对这篇paper和作者给的theano代码写了个tensorflow版本，但时间匆忙，代码两个月之后的现在看来显得稚嫩了，不成熟的点主要在项目架构设计上，就不公开啦。如有兴趣，可以私信我。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记《Neural Sentiment Classification with User and Product Attention》">
+<meta property="og:url" content="http://lan2720.github.io/2016/11/10/论文笔记《Neural-Sentiment-Classification-with-User-and-Product-Attention》/index.html">
+<meta property="og:site_name" content="HAKUNA MATATA">
+<meta property="og:description" content="今年9月初针对这篇paper和作者给的theano代码写了个tensorflow版本，但时间匆忙，代码两个月之后的现在看来显得稚嫩了，不成熟的点主要在项目架构设计上，就不公开啦。如有兴趣，可以私信我。">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/901f9a6fgw1f7njtk3itjj20cq03et97.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/901f9a6fgw1f7nk4pkpqfj20h20303z0.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fjw1f7ns3rsvxkj21kw07r0zf.jpg">
+<meta property="og:updated_time" content="2016-11-10T10:50:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文笔记《Neural Sentiment Classification with User and Product Attention》">
+<meta name="twitter:description" content="今年9月初针对这篇paper和作者给的theano代码写了个tensorflow版本，但时间匆忙，代码两个月之后的现在看来显得稚嫩了，不成熟的点主要在项目架构设计上，就不公开啦。如有兴趣，可以私信我。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主大人'
+    }
+  };
+</script>
+
+
+
+
+
+  <title> 论文笔记《Neural Sentiment Classification with User and Product Attention》 | HAKUNA MATATA </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?9df4ceec6aad0e521753edbb3b445837";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">HAKUNA MATATA</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Lan's Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-常用工具">
+          <a href="/常用工具" rel="section">
+            
+            常用工具
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '7e3w3dJQaJJjrp8kGcmp','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                论文笔记《Neural Sentiment Classification with User and Product Attention》
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-10T18:45:48+08:00" content="2016-11-10">
+              2016-11-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/10/论文笔记《Neural-Sentiment-Classification-with-User-and-Product-Attention》/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/10/论文笔记《Neural-Sentiment-Classification-with-User-and-Product-Attention》/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/11/10/论文笔记《Neural-Sentiment-Classification-with-User-and-Product-Attention》/" class="leancloud_visitors" data-flag-title="论文笔记《Neural Sentiment Classification with User and Product Attention》">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>来源：清华刘致远团队EMNLP 2016 long paper<br>关键词：<code>Document-level</code>，<code>User/Product info</code>， <code>LSTM</code>，<code>attention</code></p>
+<h2 id="问题">问题</h2><p>document-level的sentiment classification。假设每个document都对一个product表达情感，旨在确定对该product的overvall sentiment。</p>
+<h2 id="传统方法">传统方法</h2><p>将情感分类作为text classification问题的一个特殊情况。显然，情感极性或ratings就作为category，然后用机器学习的方法训练出一个文本分类器。该分类器的性能极大的依赖于提取出来的features，如有effective features或额外的情感词典信息，才能得到很好的结果。</p>
+<h2 id="基于深度学习的方法">基于深度学习的方法</h2><p>旨在用神经网络学出low-dimensional text features.<br>现存的方法是，直接将a sentence或a document作为输入，学出其语义表示。但该方法存在一定的问题，即忽略了users和products的重要特点。<br>因为，很显然，用户的偏好和产品的特点极大的影响了其ratings。</p>
+<h2 id="Tang’s_work">Tang’s work</h2><p>既然试图想把user preference和product characteristics加入到神经网络中，唐都钰在ACL 2015年的一篇<a href="http://ir.hit.edu.cn/~dytang/paper/acl2015/acl2015.pdf" target="_blank" rel="external">paper</a>就做了初次尝试。</p>
+<p>但是Tang的模型存在以下几个问题：</p>
+<ol>
+<li>preference matrix for each user/product是不充分的，由于在IMDB/Yelp上的大部分用户都只有十几条reviews，因此难以well-trained。因此得到的这个preference matrix并没有训练好。</li>
+<li>【第2个问题并没有描述清楚】</li>
+</ol>
+<h2 id="如何解决现存的问题">如何解决现存的问题</h2><p>提出一种LSTM模型，融入user和product信息。</p>
+<p>模型分为两部分：<br>(1) 构建一个hierarchical LSTM同时产生sentence-level表示，和document-level表示。实际上是由每个sentence先产生与之对应的sentence representation，然后这些sentence representation再作为一个LSTM layer的输入，产生document representation。<br>(2) 在document的不同语义级别中都引入user和product信息。</p>
+<h2 id="相关研究">相关研究</h2><h3 id="Tree-structured_LSTM">Tree-structured LSTM</h3><p><a href="https://arxiv.org/pdf/1503.00075.pdf" target="_blank" rel="external">Improved Semantic Representations From Tree-Structured Long Short-Term Memory Networks</a><br><em>Kai Sheng Tai, Richard Socher, Christopher D. Manning</em></p>
+<p><a href="http://arxiv.org/pdf/1503.00185v5.pdf" target="_blank" rel="external">When Are Tree Structures Necessary for Deep Learning of Representations?</a><br><em>Jiwei Li, Minh-Thang Luong, Dan Jurafsky and Eduard Hovy</em></p>
+<h3 id="Hierarchical_method_for_Document-level_sentiment_classification">Hierarchical method for Document-level sentiment classification</h3><p><a href="http://ir.hit.edu.cn/~dytang/paper/emnlp2015/emnlp2015.pdf" target="_blank" rel="external">Document Modeling with Gated Recurrent Neural Network<br>for Sentiment Classification</a><br><em>Duyu Tang et al.</em></p>
+<p><a href="http://www.aclweb.org/old_anthology/D/D15/D15-1263.pdf" target="_blank" rel="external">Better Document-level Sentiment Analysis from RST Discourse Parsing</a><br><em>Parminder Bhatia et al.</em><br>该文章在document中生成了不同级别（phrase，sentence，document）的语义表示。</p>
+<h3 id="attention_mechanism">attention mechanism</h3><p>旨在从sentence中挑选关键词，或从document中挑选关键句【后者值得注意】<br><a href="https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf" target="_blank" rel="external">Hierarchical Attention Networks for Document Classification</a><br><em>Zichao Yang, Diyi Yang et al.</em><br>这篇发的没前面好，naacl2016，来自cmu</p>
+<h2 id="具体方法">具体方法</h2><p>分三个步骤：</p>
+<ol>
+<li>如何通过<strong>HLSTM</strong>得到document语义表示。</li>
+<li>将document语义表示和<strong>user and product</strong> info融合形成enhance document representation。</li>
+<li>这个enhenced representation就作为情感分类器的features来用。</li>
+</ol>
+<h3 id="第一部分：Neural_Sentiment_Classification">第一部分：Neural Sentiment Classification</h3><p>一直想吐槽这个section的取名，因为这部分明明只对应上面的步骤1，但强行被命名成了Classification。【excuse me？</p>
+<p>其实这一部分的idea就是建模document的语义——learn a document-level representation。只是利用的是一种层级结构，这种层级结构将word-level表示组合成sentence-level表示，进而再组合成document-level表示。</p>
+<h4 id="word_level">word level</h4><p>每个word用word embedding表示。<br>一个句子可以用a sequence of words表示。在时间上就是每一时刻，给lstm cell输入一个word embedding，得到这一时刻的输出（对lstm cell而言，output就是hidden state）。这样，整个句子在time上展开后，就得到<strong>a sequence of hidden states</strong>。<br>再将the seq of hidden state进行<strong>average pooling</strong>得到sentence representation。</p>
+<h4 id="sentence_level">sentence level</h4><p>类似的，可以将document看出是a sequence of sentence，既然我们现在有了sentence representation，那么每一时刻就给lstm cell输入一个sentence representation，最后在时间上展开，也得到a seq of hidden states。<br>同样average pooling这个a seq of hidden states之后得到了document represention。</p>
+<h3 id="第二部分：User_Product_Attention(UPA)">第二部分：User Product Attention(UPA)</h3><p>对应上述的步骤2：关键就在于如何融入user/product信息。<br>idea：给不同的semantic level（word-level/sentence-level）的lstm layer，分别融合word-level UPA和sentence-level UPA，最后获得document representation。</p>
+<h4 id="如何改进第一部分的NSC模型">如何改进第一部分的NSC模型</h4><p>以上我们知道了a seq of words(or sentences)通过lstm cell在时间上展开，得到a seq of hidden states，这些hidden states进行了average pooling得到更高阶的representation。<br>这个过程中有两点不足：<br>所有的words对最终得到的representation贡献是一致的。</p>
+<p>【猜测】<br>但是实际上，如果一个user他在评论时经常用到一些negative的words，那么模型应该关注其reviews中negative words，才能更好的进行预测。</p>
+<p>因此要想知道句子中的每个word的重要性，就需要引入attention，计算出每个word的权重。</p>
+<h4 id="attention应该加在哪">attention应该加在哪</h4><p>lstm的部分只是对句子context关联关系的一个建模，因此这一步骤不能加入attention，生成的hidden state是当前word的一个representation。那么，就可以在word representation组合成sentence representation的这个部分引入word权重，正好表示了句子应该更关注某一些word representation，而另一些word representation对sentence表示的贡献较少。</p>
+<h4 id="计算权重">计算权重</h4><p>理解了权重应该加在哪之后，就是如何计算权重的问题了。<br>计算权重就需要用到之前一直提到的user和product info（因为现在来说只有外部信息才能影响attention了），因此有了下面的公式：<br><img src="http://ww3.sinaimg.cn/large/901f9a6fgw1f7njtk3itjj20cq03et97.jpg" alt=""><br>由于权重$\alpha_j^i$之和等于1，因此使用softmax是很显然的。关键就是里面的e方程。实际上在Tang的之前一篇paper中也用到了，他给出的直接是affine transformation（即tanh）<br><img src="http://ww2.sinaimg.cn/large/901f9a6fgw1f7nk4pkpqfj20h20303z0.jpg" alt=""><br>【这篇paper中还加了一个V向量，个人认为完全不需要，待验证】</p>
+<p>这里$W_U$, $u$, $W_p$, $p$, $b$,都是在training过程中要更新的参数。</p>
+<p>只不过以上是word-level阶段的attention参数$\alpha_j^i$的计算，在sentence-level计算是类似的，需要注意$u$和$p$使用的是和word-level同一个。</p>
+<h3 id="第三部分：情感分类">第三部分：情感分类</h3><p>这一步就简单并且传统了，tanh(wx+b)然后通过softmax得到每一class的概率，再用cross entropy计算loss</p>
+<h2 id="实验">实验</h2><h3 id="数据集">数据集</h3><p>使用了包含user和product信息的数据集IMDB，Yelp2013，Yelp2014<br><img src="http://ww4.sinaimg.cn/large/901f9a6fjw1f7ns3rsvxkj21kw07r0zf.jpg" alt=""></p>
+<h3 id="横量指标">横量指标</h3><p>Accuracy：衡量的事overall sentiment classification performance<br>RMSE(Root Mean Square Error)均方根误差：衡量predict ratings和真实的ratings之间的偏差<br>具体计算公式见论文。</p>
+<h3 id="初始参数">初始参数</h3><p>word embeddings：在每个dataset上单独训练SkipGram，200维。<br>user embedding和product embedding：均为200维，初始化为0<br>LSTM cell的num_units：200<br>优化算法：AdaDelta<br>用dev set调参</p>
+<h3 id="对比实验">对比实验</h3><p>和唐都钰这篇<a href="http://www.aclweb.org/website/old_anthology/P/P15/P15-1098.pdf" target="_blank" rel="external">paper</a>完全一样。</p>
+<h3 id="模型比较">模型比较</h3><p>分两部分：<br>（1）local text information<br>（2）both local text information &amp; global user product information</p>
+<p>在第（1）部分中，作者提出的NSC在全部数据集上的结果均比其他模型结果有超过4%的improvement<br>在第（2）部分NSC+UPA，加入attention后，结果比NSC更好</p>
+<h3 id="模型分析">模型分析</h3><h4 id="attention机制in_word_&amp;_sentence_level">attention机制in word &amp; sentence level</h4><p>（1）都有提升<br>（2）word level的attention较sentence level提升更大<br>（3）两个senmatic level都加入attention机制的结果最佳</p>
+<h4 id="User_&amp;_Product_information">User &amp; Product information</h4><p>（1）两种信息都有帮助<br>（2）user info比product info对于document representation更有帮助</p>
+<h4 id="句子长度">句子长度</h4><p>对所有input document长度均普遍outperform，证明了模型的健壮性和灵活性。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="http://ww4.sinaimg.cn/large/901f9a6fjw1f9lb1mjkmdj20af0aigmm.jpg" alt="Lan WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/attention/" rel="tag">#attention</a>
+          
+            <a href="/tags/nlp/" rel="tag">#nlp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/10/论文笔记《Convolutional-Neural-Networks-for-Sentence-Classification》/" rel="next" title="论文笔记《Convolutional Neural Networks for Sentence Classification》">
+                <i class="fa fa-chevron-left"></i> 论文笔记《Convolutional Neural Networks for Sentence Classification》
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/10/论文笔记《Neural-Sentiment-Classification-with-User-and-Product-Attention》/"
+           data-title="论文笔记《Neural Sentiment Classification with User and Product Attention》" data-url="http://lan2720.github.io/2016/11/10/论文笔记《Neural-Sentiment-Classification-with-User-and-Product-Attention》/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww4.sinaimg.cn/large/901f9a6fgw1f9lda3fojjj21kw16o1kx.jpg"
+               alt="Lan" />
+          <p class="site-author-name" itemprop="name">Lan</p>
+          <p class="site-description motion-element" itemprop="description">小手一抖将2015-2016的md源文件全部误删，之前的博客暂无法恢复。一切从新开始。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传统方法"><span class="nav-number">2.</span> <span class="nav-text">传统方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于深度学习的方法"><span class="nav-number">3.</span> <span class="nav-text">基于深度学习的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tang’s_work"><span class="nav-number">4.</span> <span class="nav-text">Tang’s work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决现存的问题"><span class="nav-number">5.</span> <span class="nav-text">如何解决现存的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关研究"><span class="nav-number">6.</span> <span class="nav-text">相关研究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tree-structured_LSTM"><span class="nav-number">6.1.</span> <span class="nav-text">Tree-structured LSTM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hierarchical_method_for_Document-level_sentiment_classification"><span class="nav-number">6.2.</span> <span class="nav-text">Hierarchical method for Document-level sentiment classification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#attention_mechanism"><span class="nav-number">6.3.</span> <span class="nav-text">attention mechanism</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体方法"><span class="nav-number">7.</span> <span class="nav-text">具体方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一部分：Neural_Sentiment_Classification"><span class="nav-number">7.1.</span> <span class="nav-text">第一部分：Neural Sentiment Classification</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#word_level"><span class="nav-number">7.1.1.</span> <span class="nav-text">word level</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sentence_level"><span class="nav-number">7.1.2.</span> <span class="nav-text">sentence level</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二部分：User_Product_Attention(UPA)"><span class="nav-number">7.2.</span> <span class="nav-text">第二部分：User Product Attention(UPA)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何改进第一部分的NSC模型"><span class="nav-number">7.2.1.</span> <span class="nav-text">如何改进第一部分的NSC模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#attention应该加在哪"><span class="nav-number">7.2.2.</span> <span class="nav-text">attention应该加在哪</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算权重"><span class="nav-number">7.2.3.</span> <span class="nav-text">计算权重</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三部分：情感分类"><span class="nav-number">7.3.</span> <span class="nav-text">第三部分：情感分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">8.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集"><span class="nav-number">8.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#横量指标"><span class="nav-number">8.2.</span> <span class="nav-text">横量指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始参数"><span class="nav-number">8.3.</span> <span class="nav-text">初始参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对比实验"><span class="nav-number">8.4.</span> <span class="nav-text">对比实验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型比较"><span class="nav-number">8.5.</span> <span class="nav-text">模型比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型分析"><span class="nav-number">8.6.</span> <span class="nav-text">模型分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#attention机制in_word_&_sentence_level"><span class="nav-number">8.6.1.</span> <span class="nav-text">attention机制in word & sentence level</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#User_&_Product_information"><span class="nav-number">8.6.2.</span> <span class="nav-text">User & Product information</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#句子长度"><span class="nav-number">8.6.3.</span> <span class="nav-text">句子长度</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lan</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lan2720"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("7cil6ydIMfjk21UbfrogqV7u-gzGzoHsz", "7rd7AKUgYJLuNAqPBpFMJoHP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
