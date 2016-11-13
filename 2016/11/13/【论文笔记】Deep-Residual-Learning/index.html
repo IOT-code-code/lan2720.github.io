@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="linux," />
+  <meta name="keywords" content="deeplearning," />
 
 
 
@@ -102,16 +102,18 @@
 
 
 
-<meta name="description" content="linux下中文乱码问题做一个mark">
+<meta name="description" content="MSRA用这个网络拿到了ImageNet2015的第一名，膜拜。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解决Intellij Idea在linux下中文乱码问题">
-<meta property="og:url" content="http://lan2720.github.io/2016/11/10/解决Intellij-Idea在linux下中文乱码问题/index.html">
+<meta property="og:title" content="【论文笔记】Deep Residual Learning">
+<meta property="og:url" content="http://lan2720.github.io/2016/11/13/【论文笔记】Deep-Residual-Learning/index.html">
 <meta property="og:site_name" content="HAKUNA MATATA">
-<meta property="og:description" content="linux下中文乱码问题做一个mark">
-<meta property="og:updated_time" content="2016-11-10T11:32:39.000Z">
+<meta property="og:description" content="MSRA用这个网络拿到了ImageNet2015的第一名，膜拜。">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/901f9a6fjw1f9qvzdcnb7j209a0sajtl.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fjw1f9qwfcjzjfj20qw09wab6.jpg">
+<meta property="og:updated_time" content="2016-11-13T15:43:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="解决Intellij Idea在linux下中文乱码问题">
-<meta name="twitter:description" content="linux下中文乱码问题做一个mark">
+<meta name="twitter:title" content="【论文笔记】Deep Residual Learning">
+<meta name="twitter:description" content="MSRA用这个网络拿到了ImageNet2015的第一名，膜拜。">
 
 
 
@@ -133,7 +135,7 @@
 
 
 
-  <title> 解决Intellij Idea在linux下中文乱码问题 | HAKUNA MATATA </title>
+  <title> 【论文笔记】Deep Residual Learning | HAKUNA MATATA </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -301,7 +303,7 @@
             
             
               
-                解决Intellij Idea在linux下中文乱码问题
+                【论文笔记】Deep Residual Learning
               
             
           </h1>
@@ -313,8 +315,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-11-10T19:10:17+08:00" content="2016-11-10">
-              2016-11-10
+            <time itemprop="dateCreated" datetime="2016-11-13T23:38:53+08:00" content="2016-11-13">
+              2016-11-13
             </time>
           </span>
 
@@ -324,8 +326,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/11/10/解决Intellij-Idea在linux下中文乱码问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/10/解决Intellij-Idea在linux下中文乱码问题/" itemprop="commentsCount"></span>
+                <a href="/2016/11/13/【论文笔记】Deep-Residual-Learning/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/13/【论文笔记】Deep-Residual-Learning/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -335,7 +337,7 @@
 
           
           
-             <span id="/2016/11/10/解决Intellij-Idea在linux下中文乱码问题/" class="leancloud_visitors" data-flag-title="解决Intellij Idea在linux下中文乱码问题">
+             <span id="/2016/11/13/【论文笔记】Deep-Residual-Learning/" class="leancloud_visitors" data-flag-title="【论文笔记】Deep Residual Learning">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -357,26 +359,27 @@
       
 
       
-        <h2 id="Problem">Problem</h2><p>Intellij Idea是最好的Java IDE。。Intellij Idea是最好的Java IDE。。Intellij Idea是最好的Java IDE。。重要的事情说三遍</p>
-<p>但是打开project的源码发现之前写的中文注释乱码：</p>
-<blockquote>
-<p>中文变成了口口口口口</p>
-</blockquote>
-<p>网上搜到的大部分答案说</p>
-<blockquote>
-<p>进入File Settings 里的 Appearance项，选中Override default fonts by ，把 Name 设置为 微软雅黑</p>
-</blockquote>
-<p>之前默认的font是ubuntu，很好看，换成微软雅黑整个界面丑了不止一个档次！所以，如果只是想让源码中的中文能正常显示的话，只能另寻他路。</p>
-<h2 id="Solution">Solution</h2><p>一个快速而有效的方法是：</p>
+        <p>论文: <a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="external">https://arxiv.org/abs/1512.03385</a><br>kaiming的caffe实现：<a href="https://github.com/KaimingHe/deep-residual-networks" target="_blank" rel="external">code</a><br>tensorflow实现-cifar10：<a href="https://github.com/ppwwyyxx/tensorpack/tree/master/examples/ResNet" target="_blank" rel="external">code</a></p>
+<h2 id="前言">前言</h2><p>本文不对整篇paper进行详细解读，仅表达个人理解。之所以要做这件事，是因为在读paper过程中，也搜到了很多关于这篇文章的解读，大部分都理解上存在偏差，或者该深入理解的没有理解到位。</p>
+<h2 id="主要思想">主要思想</h2><p>很多经验和事实告诉我们：网络越深，层数越多，效果不一定好，往往都不如浅层网络得到的效果好。何恺明大神称这个现象为<code>degradation</code>。<br>那这是为什么呢？<br>有几个显然的猜想：</p>
 <ol>
-<li>在<a href="http://www.myfontfree.com/microsoft-yahei-myfontfreecom66f594.htm" target="_blank" rel="external">这里</a>点download下载yahei字体的ttf</li>
-<li>在ubuntu 下可以执行下面操作安装该字体<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /usr/share/fonts/truetype/yahei</span><br><span class="line">sudo cp yahei.ttf  /usr/share/fonts/truetype/yahei</span><br><span class="line">fc-cache -f -v</span><br></pre></td></tr></table></figure>
+<li>是不是overfitting了？不是。因为overfitting指的是test error变大，而train error会变小，训练数据拟合的更好了。但出现degradation的时候，是train error也变大了（自然test error也变大）。也就是说，越深的网络反而学不好了，学习能力拟合效果更差了。</li>
+<li>既然学习能力变差了，那自然会想到是不是gradient在深层网络中出现vanishing的问题，bp的时候越来越小起不到参数更新的作用了？不是。因为恺明<br>大神说:<blockquote>
+<p>We argue that this optimization difficulty is unlikely to<br>be caused by vanishing gradients. These plain networks are<br>trained with BN [16], which ensures forward propagated<br>signals to have non-zero variances. We also verify that the<br>backward propagated gradients exhibit healthy norms with<br>BN. So neither forward nor backward signals vanish.</p>
+</blockquote>
 </li>
 </ol>
-<p>这里的yahei.ttf是刚刚下载的文件的名字</p>
-<ol>
-<li>重启Intellij Idea，发现中文已经可以正常显示了！</li>
-</ol>
+<p>排除这两个问题，究竟为什么会造成degradation还不得而知。</p>
+<p>但是，原因不知道没关系，恺明大神又想了：如果有一个深层网络，它的浅层完全copy一个浅层网络，后面的层做到identity，至少效果和这个浅层网络一样，不会比这个网络差的。</p>
+<p>但是现在的深层网络既然后续layers做不到identity，说明后面的non-linear layers难以学成identity。那亟待解决的问题就是希望后续layers能学着学着变成identity呀。</p>
+<h2 id="如何学成identity">如何学成identity</h2><p>好了，如何让几层layers学成identity的形式呢？也就是输出$H(x) = x$<br>恺明大神也不太确定，但是既然直接学习$x$困难，那根据前人的研究（参见论文中Sec 2的residual representation部分），residual比origin更好优化。</p>
+<p>既然这样，就定义了一个$F(x) = H(x) - x$作为residual mapping。这个mapping比identity mapping更容易学。我们只需要让这个$F(x)$无限接近0即可，也就是non-linear layers的输出无限接近于0！这样，$F(x)$部分为0，加上shortcut connect过来的$x$，自然就保证了$output=x$了。</p>
+<h2 id="为什么从浅层一开始就要用residual">为什么从浅层一开始就要用residual</h2><p><img src="http://ww3.sinaimg.cn/large/901f9a6fjw1f9qvzdcnb7j209a0sajtl.jpg" alt=""><br>从deep residual network结构图可以看到，经过一层7*7的conv layer之后所有的层都是residual block了。我一开始就疑惑了，不是说的只从后面的layer开始进行identity mapping而前面还是常规的CNN网络吗？<br>是的，如果每个residual layer都能完全保证输出无限接近于0是不需要从第二层就residual的，但这是最理想的情况，现实状况是根本无法让residual layer的输出确实全为0，实际效果还是相当于stack了多层cnn。这样的话，我们就需要在很开始的地方就使用residual layer，作用还是conv的作用，只是一定程度上起到了identity map前面浅层输出的效果。</p>
+<h2 id="关于bottleneck_design">关于bottleneck design</h2><p><img src="http://ww4.sinaimg.cn/large/901f9a6fjw1f9qwfcjzjfj20qw09wab6.jpg" alt=""><br>恺明大神说，non-bottleneck和bottleneck得到的accuracy是一样的，只是没有bottleneck经济。两种结构的时间复杂度相似，这种设计完全是基于工程考虑。<br>至于为什么工程中要用右图的结构，还真是想不明白。【知道的童鞋欢迎给我留言！】</p>
+<blockquote>
+<p>the 1×1 layers are responsible for reducing and then increasing (restoring)<br>dimensions, leaving the 3×3 layer a bottleneck with smaller<br>input/output dimensions.</p>
+</blockquote>
+<h2 id="结尾">结尾</h2><p>感觉自己已经把这篇文章最本质的东西说清楚了，都是自己一开始想不明白的点，写出来分享给大家。另外就是一些细节性的东西，如果不是代码复现的话不需要搞得太清楚，领悟其中思想是最重要滴。</p>
 
       
     </div>
@@ -415,7 +418,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/linux/" rel="tag">#linux</a>
+            <a href="/tags/deeplearning/" rel="tag">#deeplearning</a>
           
         </div>
       
@@ -424,17 +427,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/10/解读tensorflow的rnn/" rel="next" title="解读tensorflow的rnn">
-                <i class="fa fa-chevron-left"></i> 解读tensorflow的rnn
+              <a href="/2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/" rel="next" title="论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》">
+                <i class="fa fa-chevron-left"></i> 论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/11/10/论文笔记《Aspect-Level-Sentiment-Classification-with-Deep-Memory-Network》/" rel="prev" title="论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》">
-                论文笔记《Aspect Level Sentiment Classification with Deep Memory Network》 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -460,8 +459,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/11/10/解决Intellij-Idea在linux下中文乱码问题/"
-           data-title="解决Intellij Idea在linux下中文乱码问题" data-url="http://lan2720.github.io/2016/11/10/解决Intellij-Idea在linux下中文乱码问题/">
+      <div class="ds-thread" data-thread-key="2016/11/13/【论文笔记】Deep-Residual-Learning/"
+           data-title="【论文笔记】Deep Residual Learning" data-url="http://lan2720.github.io/2016/11/13/【论文笔记】Deep-Residual-Learning/">
       </div>
     
   </div>
@@ -545,7 +544,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem"><span class="nav-number">1.</span> <span class="nav-text">Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要思想"><span class="nav-number">2.</span> <span class="nav-text">主要思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何学成identity"><span class="nav-number">3.</span> <span class="nav-text">如何学成identity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么从浅层一开始就要用residual"><span class="nav-number">4.</span> <span class="nav-text">为什么从浅层一开始就要用residual</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于bottleneck_design"><span class="nav-number">5.</span> <span class="nav-text">关于bottleneck design</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结尾"><span class="nav-number">6.</span> <span class="nav-text">结尾</span></a></li></ol></div>
             
           </div>
         </section>
