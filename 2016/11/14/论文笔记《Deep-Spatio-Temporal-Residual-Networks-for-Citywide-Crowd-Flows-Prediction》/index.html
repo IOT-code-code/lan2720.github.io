@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/901f9a6fgw1f9rqw78skhj20m209uq4n.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fgw1f9rtjdllodj206o0eumy1.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/901f9a6fgw1f9rswj1b21j20po05idgi.jpg">
-<meta property="og:updated_time" content="2016-11-14T14:54:03.000Z">
+<meta property="og:updated_time" content="2016-11-14T14:58:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文笔记《Deep Spatio-Temporal Residual Networks for Citywide Crowd Flows Prediction》">
 <meta name="twitter:description" content="这篇paper对于city-level crowd flow prediction问题的定义和建模是开创性的。但是或许还有些问题值得思考。">
@@ -397,7 +397,7 @@
 <h3 id="Three_Temporal_Components">Three Temporal Components</h3><p>上面讲到了三部分时间特征，作者对每一部分的sequence信号都用了residual unit。那么其中很重要的一点必须要解释清楚为什么不用浅层CNN而是多层的residual layer。</p>
 <p>因为，CNN确实可以捕捉到局部的空间信息，但是对于地铁或高速路而言，其flow带来的是远距离的影响，短时间内造成了距离较远的两个regions间crowd flow相互交换。而该信息是无法用一两层3*3这样的filter学习到的。</p>
 <p><img src="http://ww2.sinaimg.cn/large/901f9a6fgw1f9rqw78skhj20m209uq4n.jpg" alt=""><br>从上图可以清楚的看到，只有堆叠多层，最后high-level上的一个小unit才对应看到的整个city。</p>
-<p>作者打了个比方，比如输入为32*32的crowd flow data，卷积核为3*3，第一层卷积后得到的size=(32-3+1)=30，第二层(30-2+1)=28，以此类推，需要15层才能得到2*2的feature map，基本能捕捉全局的某些特征了。<br>【遗留问题：感受野，这里可能和感受野的概念有关】</p>
+<p>作者打了个比方，比如输入为32*32的crowd flow data，卷积核为3*3，第一层卷积后得到的size=(32-3+1)=30，第二层(30-2+1)=28，以此类推，需要15层才能得到2*2的feature map，基本能捕捉全局的某些特征了。<br>【附】这个概念应该就是感受野，放一篇文章<a href="http://blog.csdn.net/kuaitoukid/article/details/46829355" target="_blank" rel="external">参考</a>。</p>
 <p>这样的层数训练时已经存在degradation的问题了，因此要用residual layer。关于residual learning的解读可以参看<a href="http://lan2720.github.io/2016/11/13/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91Deep-Residual-Learning/">上一篇</a>blog。</p>
 <h3 id="关于in/out卷积核的疑惑">关于in/out卷积核的疑惑</h3><p><img src="http://ww4.sinaimg.cn/large/901f9a6fgw1f9rtjdllodj206o0eumy1.jpg" alt=""><br>理解下这个图，将closeness dependency sequence提出来，每一时刻是[2, width, height]三维tensor，整个closeness dependency sequence相当于[$l_c$, 2, width, height]的形式。</p>
 <p>卷积操作的时候，每一时刻对应一个$W_{c}$，卷积核$W_c$大小是[2, filter_size, filter_size]，而且从公式(2)中看出每一时刻用的filter是不一样的，也就是初始化filter时，其shape应该=[$l_c$, 2, filter_size, filter_size]，然后再作用于整个dependency sequence。</p>
