@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/901f9a6fgw1f9rqw78skhj20m209uq4n.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/901f9a6fgw1f9rtjdllodj206o0eumy1.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/901f9a6fgw1f9rswj1b21j20po05idgi.jpg">
-<meta property="og:updated_time" content="2016-11-15T00:13:47.000Z">
+<meta property="og:updated_time" content="2016-11-15T00:31:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文笔记《Deep Spatio-Temporal Residual Networks for Citywide Crowd Flows Prediction》">
 <meta name="twitter:description" content="这篇paper对于city-level crowd flow prediction问题的定义和建模是开创性的。但是或许还有些问题值得思考。">
@@ -423,6 +423,7 @@
 <p>从第2点其实也可以看到，目前规定的Grip Map仅由经纬度信息划分区块。没有任何建筑信息。那么，对于时刻$t$的某一确定channel而言，<code>相邻位置</code>（空间上）的flow没有多少关联性（包含不同的建筑）。但对于某一确定channel而言，<code>相邻时间点</code>（时间上）的flow有绝对的关联性。因为$t-1$时刻[i, j]处的in-flow很可能就是$t$时刻的[i, j+1]位置的in-flow。</p>
 <p>从这个角度来说，paper中提出的ST-ResNet一开始就将时间信息给整合了。接下来一直在用residual layer做空间上的卷积。而上面我提出的疑问正是觉得空间上没有多少关联性，做卷积意义不大。</p>
 <p>【Update】实际上，空间上存在了某些隐含特征（不像时间上那么明显），正是这种不确定的关联性，类似于图像中边缘、拐角、突变等，是CNN适合去捕捉到的。</p>
+<p>另外，一开始将seq整合的部分，由于时间点之后有较明显的相关性，可能用LSTM接受a seq输出一个encoding效果会比Conv层好。但是未实验过，不知道那样做训练上会不会出现什么困难。自己以往的经验是LSTM普遍都比CNN难以训练。</p>
 <h3 id="Fusion">Fusion</h3><p>提出<code>parametric-matrix-based fusion</code>。</p>
 <p>其实思想还是与attention机制很像。attention用于nlp时，有一个问题就是不知道该关注sentence中的哪一个部分或哪些部分，既然不知道那我就学吧，所以就定义了一个参数矩阵$W_a$。作用于前面网络学出来的sentence representation，然后就学出来我应该更关注sentence的哪些部分了。</p>
 <p>类似的，我们现在得到了<em>closeness</em>, <em>period</em>, <em>trend</em>三个影响因素的<strong>表示</strong>(多层的conv相当于学到了factor的representation，将其encoding/embedding)，但不知道各自影响了多少，如何影响。简单说其实是不知道每种factor对下一时刻的in/out flow的权重。</p>
